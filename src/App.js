@@ -1,7 +1,18 @@
 import React, { useState } from "react";
 
-const Todo = ({ todo, index }) => {
-  return <div className="todo">{todo.text}</div>;
+const Todo = ({ todo, index, completeTodo, deleteTodo }) => {
+  return (
+    <div
+      style={{ textDecoration: todo.isCompleted ? "line-through" : "" }}
+      className="todo"
+    >
+      {todo.text}
+      <div>
+        <button onClick={() => completeTodo(index)}>Complete</button>
+        <button onClick={() => deleteTodo(index)}>Delete</button>
+      </div>
+    </div>
+  );
 };
 
 const TodoForm = ({ addTodo }) => {
@@ -49,11 +60,31 @@ const App = () => {
     setTodos(newTodos);
   };
 
+  const completeTodo = index => {
+    const newTodos = [...todos];
+    newTodos[index].isCompleted = true;
+    setTodos(newTodos);
+  };
+
+  const deleteTodo = index => {
+    const newTodos = [...todos];
+    newTodos.splice(index, 1);
+    setTodos(newTodos);
+  };
+
   return (
     <div className="app">
       <div className="todo-list">
         {todos.map((todo, index) => {
-          return <Todo key={index} index={index} todo={todo} />;
+          return (
+            <Todo
+              key={index}
+              index={index}
+              todo={todo}
+              completeTodo={completeTodo}
+              deleteTodo={deleteTodo}
+            />
+          );
         })}
 
         <TodoForm addTodo={addTodo} />
